@@ -1,17 +1,19 @@
 # VaxSeer
 
-Code for [VaxSeer: a machine learning framework for influenza vaccine strain selection](https://www.nature.com/articles/s41591-025-03917-y).
+Code for [Influenza vaccine strain selection with an AI-based evolutionary and antigenicity model](https://www.nature.com/articles/s41591-025-03917-y).
 
 # Setup
 
 ### Environment
+
+The codebase has been tested on Ubuntu 22.04.3 LTS.  The installation requires approximately 3.5 GB of disk space and typically completes within 30 minutes.
 
 ```
 conda env create -f environment.yaml
 conda activate vaxseer
 ```
 
-[MMseq2](https://github.com/soedinglab/MMseqs2) is required for aligning sequences.
+[MMseq2](https://github.com/soedinglab/MMseqs2) is required for aligning sequences (only used for the antigenicity predictor).
 
 
 # Data

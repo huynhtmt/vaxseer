@@ -2,6 +2,20 @@
 
 First, you might need to register for the access of [GISAID](https://gisaid.org/). Download the HA protein sequences and metadata from EpiFlu. The accession ids of proteins used in our experiments could be found in `gisaid/ha_acc_ids.csv`.
 
+An example of the sequence and meta data format is provided in `data/gisaid/example_ha.fasta` and `data/gisaid/example_metadata.csv`. We recommend using the same header format when downloading data from GISAID to ensure reproducibility.
+
+### Use your own data:
+
+If you would like to train a model on your own data, you only need to prepare the sequence file and metadata file in the same format as provided. The metadata file must contain the following required columns:
+
+```
+HA Segment_Id:   The ID of the HA sequence (must begin with "EPI") and must match the identifier used in the FASTA file.
+Isolate_Name:    The strain name.
+Subtype:         For example, "A/H3N2".
+Host:            For example, "Human".
+Collection_Date: For example, "2025-10-05".
+```
+
 # Build training data for dominance predictors
 
 Following code is used to build the training data collected before `year`-`month` for dominance predictors.

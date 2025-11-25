@@ -13,18 +13,20 @@ For example, if you want to build the candidate vaccine set for A/H3N2 and 2018 
 cd ../data
 
 subtype="a_h3n2" # or a_h1n1
+year="2018"
 meta_data_path="gisaid/metadata.csv"
 sequences_path="gisaid/ha.fasta"
 save_dir="gisaid/ha_processed"
 
 python process_fasta.py --time_interval 9999 \
-    --start_date 2015-02 \
-    --end_date 2018-02 \
+    --start_date "$(expr $year - 3)"-02 \
+    --end_date "$year"-02 \
     --subtype $subtype --host human --split_by month \
     --meta_data_path $meta_data_path \
     --sequences_path $sequences_path \
     --save_dir $save_dir \
     --remove_min_size 1000 \
+    --min_seq_length 553 \
     --min_count 5
 ```
 
@@ -45,6 +47,7 @@ python process_fasta.py --time_interval 6 \
     --meta_data_path $meta_data_path \
     --sequences_path $sequences_path \
     --remove_min_size 100 \
+    --min_seq_length 553 \
     --save_dir $save_dir
 
 python split_by_time.py $save_dir/2003-10_to_2023-04_6M/$subtype/human_minBinSize100_lenQuantile0.2.fasta
