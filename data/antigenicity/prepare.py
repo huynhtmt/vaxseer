@@ -154,7 +154,7 @@ if __name__ == "__main__":
             bool_mask.append(True)
         else:
             bool_mask.append(False)
-    bool_mask = np.asarray(bool_mask, dtype=np.bool8)
+    bool_mask = np.asarray(bool_mask, dtype=np.bool_)
     df = df[bool_mask]
     df["hi"] = normalized_his
 
@@ -221,7 +221,12 @@ if __name__ == "__main__":
 
         relative_hi.append((virus_accid, ref_accid, loghi, ref_ori_names))
     
-    print(relative_hi[0])
+    
+    if len(relative_hi) > 0:
+        print(relative_hi[0])
+    else:
+        print("No HI pairs found for this subtype/time window.")
+
     
     print("# of pairs", len(relative_hi))
     hi_value_output_path = os.path.join(args.sequences_output_path.split(".fasta")[0] + "_hi_folds.csv")
