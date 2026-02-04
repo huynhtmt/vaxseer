@@ -1,14 +1,13 @@
 import json
-from data.io import read_fasta
-from data.vocab import load_esm_alphabet
-from data.datasets import TemporalFastaDataset
-from data.data_modules.base_dm import ProteinGISAIDDataModule
-from data.data_modules import register_dm
+from vaxseer.data.io import read_fasta
+from vaxseer.data.vocab import load_esm_alphabet
+from vaxseer.data.datasets import TemporalFastaDataset
+from vaxseer.data.data_modules.base_dm import ProteinGISAIDDataModule
+from vaxseer.data.data_modules import register_dm
 from copy import deepcopy
-from utils.args import str2bool
+from vaxseer.utils.args import str2bool
 import numpy as np
 from collections import defaultdict
-
 
 @register_dm("lm_weighted")
 class ProteinLMWeightedDataModule(ProteinGISAIDDataModule):

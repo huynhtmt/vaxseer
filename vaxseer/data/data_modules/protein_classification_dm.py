@@ -1,11 +1,21 @@
+# import pandas as pd
+# from collections import Counter
+# from data.io import read_fasta
+# from data.vocab import load_esm_alphabet
+# from data.datasets import PairwiseClassificationDataset, PairwiseAlnClassificationDataset
+# from data.data_modules.base_dm import ProteinGISAIDDataModule
+# from data.data_modules import register_dm
+# from utils.args import str2bool
+
+# AFTER
 import pandas as pd
 from collections import Counter
-from data.io import read_fasta
-from data.vocab import load_esm_alphabet
-from data.datasets import PairwiseClassificationDataset, PairwiseAlnClassificationDataset
-from data.data_modules.base_dm import ProteinGISAIDDataModule
-from data.data_modules import register_dm
-from utils.args import str2bool
+from vaxseer.data.io import read_fasta
+from vaxseer.data.vocab import load_esm_alphabet
+from vaxseer.data.datasets import PairwiseClassificationDataset, PairwiseAlnClassificationDataset
+from vaxseer.data.data_modules.base_dm import ProteinGISAIDDataModule
+from vaxseer.data.data_modules import register_dm
+from vaxseer.utils.args import str2bool
 
 @register_dm("hi_regression")
 class PairwiseRegressionDataModule(ProteinGISAIDDataModule):

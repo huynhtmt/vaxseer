@@ -2,12 +2,15 @@ import torch
 from lightning_transformers.task.nlp.language_modeling import LanguageModelingTransformer
 import transformers
 import torch.nn as nn
-from data.utils import discretize_time
+#from data.utils import discretize_time
+from vaxseer.data.utils import discretize_time
 from torch.nn import CrossEntropyLoss
-from models import register_model
+#from models import register_model
+from vaxseer.models import register_model
 import math, logging
 from typing import IO, Any, Callable, Dict, Optional, Union
-from utils.args import str2bool
+#from utils.args import str2bool
+from vaxseer.utils.args import str2bool
 from transformers import AutoConfig
 from collections import defaultdict, namedtuple
 import os

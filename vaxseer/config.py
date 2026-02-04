@@ -1,8 +1,10 @@
 import logging, argparse, os
 import pytorch_lightning as pl
-from models import build_model
-from data.data_modules import build_data_module
-from utils.args import str2bool
+from vaxseer.models import build_model
+#from data.data_modules import build_data_module
+#from utils.args import str2bool
+from vaxseer.data.data_modules import build_data_module
+from vaxseer.utils.args import str2bool
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',

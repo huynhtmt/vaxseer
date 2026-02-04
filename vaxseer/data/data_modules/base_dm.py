@@ -2,12 +2,22 @@ from collections import defaultdict
 import pytorch_lightning as pl
 import os
 from functools import partial
-from data.io import read_fasta
-from data.vocab import load_esm_alphabet
-from data.datasets import TemporalFastaDataset
-from data.utils import default_lm_collate_func
+
+# OLD:
+# from data.io import read_fasta
+# from data.vocab import load_esm_alphabet
+# from data.datasets import TemporalFastaDataset
+# from data.utils import default_lm_collate_func
+# from utils.args import str2bool
+
+# NEW (absolute, package-rooted):
+from vaxseer.data.io import read_fasta
+from vaxseer.data.vocab import load_esm_alphabet
+from vaxseer.data.datasets import TemporalFastaDataset
+from vaxseer.data.utils import default_lm_collate_func
+from vaxseer.utils.args import str2bool
+
 from torch.utils.data import DataLoader, random_split
-from utils.args import str2bool
 from copy import deepcopy
 import json
 from collections.abc import Mapping

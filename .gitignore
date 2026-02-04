@@ -5,3 +5,14 @@ __pycache__/
 cand.fasta
 circ.fasta
 .bashrc
+# --- Data and large artifacts (do not commit) ---
+data/gisaid/
+data/antigenicity/
+runs/
+evaluation/tmp/
+*.bak
+=12
+
+# Python caches
+__pycache__/
+*.pyc

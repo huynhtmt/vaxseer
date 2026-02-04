@@ -1,11 +1,13 @@
-from models import register_model
+#from models import register_model
+from vaxseer.models import register_model
 import torch, esm
 import torch.nn as nn
 import transformers
 from pytorch_lightning import LightningModule
 from esm import pretrained
 from collections import defaultdict
-from utils.args import str2bool
+#from utils.args import str2bool
+from vaxseer.utils.args import str2bool
 from sklearn.metrics import average_precision_score, roc_auc_score
 import pandas as pd
 from esm.model.msa_transformer import MSATransformer
@@ -41,7 +43,32 @@ class ESMClassifier(LightningModule):
         self.save_hyperparameters()
 
         self.alphabet = alphabet
-        self.pad_idx = alphabet.pad()
+        #self.pad_idx = alphabet.pad()
+    
+        # ---- Robust pad index across fair-esm versions ----
+        def _resolve_pad_idx(alphabet):
+            # Legacy (older fair-esm): method
+            if hasattr(alphabet, "pad"):
+                try:
+                    return alphabet.pad()
+                except TypeError:
+                    pass
+            # Common attributes (newer fair-esm)
+            for cand in ("pad_idx", "padding_idx"):
+                if hasattr(alphabet, cand):
+                    return getattr(alphabet, cand)
+            # Token-based fallbacks
+            if hasattr(alphabet, "get_idx"):
+                try:
+                    return alphabet.get_idx("<pad>")
+                except Exception:
+                    pass
+            toks = getattr(alphabet, "standard_toks", None)
+            if toks and "<pad>" in toks:
+                return toks.index("<pad>")
+            raise AttributeError("Cannot resolve pad_idx from ESM Alphabet")
+        
+        self.pad_idx = _resolve_pad_idx(alphabet)
         self.config = config
 
         if args.get("model_name_or_path", None) is None:

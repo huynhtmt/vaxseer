@@ -1,17 +1,34 @@
 import torch
 import pytorch_lightning as pl
-from lightning_transformers.task.nlp.language_modeling import (
-    LanguageModelingTransformer,
-)
+# from lightning_transformers.task.nlp.language_modeling import (
+#     LanguageModelingTransformer,
+# )
+
+# Robust import of LT base. If unavailable, fall back to PL LightningModule so class definition doesn't crash.
+try:
+    # common for lightning-transformers 0.2.1
+    from lightning_transformers.task.nlp.language_modeling import LanguageModelingTransformer
+except Exception:
+    try:
+        # alternate layout in some 0.2.x wheels
+        from lightning_transformers.task.nlp.language_modeling.transformer import LanguageModelingTransformer
+    except Exception:
+        import pytorch_lightning as pl
+        LanguageModelingTransformer = pl.LightningModule
+        
 import transformers
 import torch.nn as nn
-from data.utils import discretize_time
+#from data.utils import discretize_time
+from vaxseer.data.utils import discretize_time
 from torch.nn import CrossEntropyLoss
-from models import register_model
+#from models import register_model
+from vaxseer.models import register_model
 import math, logging
 from typing import IO, Any, Callable, Dict, Optional, Tuple, Type, Union
-from utils.args import str2bool
+#from utils.args import str2bool
+from vaxseer.utils.args import str2bool
 from transformers import AutoConfig, PreTrainedTokenizerBase
+
 
 class GPT2TimeModel(transformers.GPT2LMHeadModel):
     def __init__(self, config) -> None:

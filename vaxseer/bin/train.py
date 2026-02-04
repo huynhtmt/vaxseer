@@ -1,9 +1,9 @@
 import os, torch, sys, logging
-from config import parse_args
+from vaxseer.config import parse_args
 import pytorch_lightning as pl
 from pytorch_lightning.callbacks import LearningRateMonitor, ModelCheckpoint, TQDMProgressBar, EarlyStopping
-from models import build_model
-from data.data_modules import build_data_module
+from vaxseer.models import build_model
+from vaxseer.data.data_modules import build_data_module
 import csv, json
 import pickle as pkl
 
@@ -71,6 +71,16 @@ def train(args, model, dm):
     if args.early_stop:
         callbacks.append(EarlyStopping(monitor=args.early_stop_monitor, mode=args.early_stop_mode, patience=args.early_stop_patience))
     
+    # --- CPU fallback guard (insert just before Trainer.from_argparse_args) ---
+    import torch
+    if not torch.cuda.is_available():
+        # force CPU if no CUDA
+        if not hasattr(args, "accelerator") or args.accelerator in (None, "gpu"):
+            args.accelerator = "cpu"
+        # Lightning 1.7.x expects an int for CPU devices
+        args.devices = 1
+    # --- end guard ---
+
     trainer = pl.Trainer.from_argparse_args(args, callbacks=callbacks)
 
     trainer.logger._default_hp_metric = None  # Optional logging argument that we don't need

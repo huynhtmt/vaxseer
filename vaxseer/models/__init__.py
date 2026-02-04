@@ -1,27 +1,48 @@
+# vaxseer/models/__init__.py
 """isort:skip_file"""
-
-import argparse
+import warnings
 import importlib
 import os
 
 MODEL_REGISTRY = {}
 
-def register_model(name):
-    def register_model_cls(cls):
+
+def register_model(name: str):
+    """
+    Back-compat public decorator:
+        @register_model("gpt2_time_new")
+        class GPT2TimeNew(...): ...
+    """
+    return register_model_cls(name)
+
+
+def register_model_cls(name: str):
+    """
+    Internal decorator used by register_model.
+    Duplicate registrations warn and return the already-registered class.
+    """
+    def wrapper(cls):
         if name in MODEL_REGISTRY:
-            raise ValueError("Cannot register duplicate model ({})".format(name))
+            warnings.warn(
+                f"Model '{name}' already registered; skipping duplicate.",
+                RuntimeWarning
+            )
+            return MODEL_REGISTRY[name]
         MODEL_REGISTRY[name] = cls
         return cls
-    return register_model_cls
+    return wrapper
 
 
-def build_model(name):
+def build_model(name: str):
     if name in MODEL_REGISTRY:
         return MODEL_REGISTRY[name]
-    else:
-        raise ValueError("Cannot find model named %s" % name)
+    raise ValueError(f"Cannot find model named {name}")
 
-def import_models(models_dir, namespace):
+
+def import_models(models_dir: str, namespace: str):
+    """
+    Dynamically import every .py (and package) in models_dir under 'namespace'.
+    """
     for file in os.listdir(models_dir):
         path = os.path.join(models_dir, file)
         if (
@@ -29,23 +50,10 @@ def import_models(models_dir, namespace):
             and not file.startswith(".")
             and (file.endswith(".py") or os.path.isdir(path))
         ):
-            model_name = file[: file.find(".py")] if file.endswith(".py") else file
-            importlib.import_module(namespace + "." + model_name)
-
-            # # extra `model_parser` for sphinx
-            # if model_name in MODEL_REGISTRY:
-            #     parser = argparse.ArgumentParser(add_help=False)
-            #     group_archs = parser.add_argument_group("Named architectures")
-            #     group_archs.add_argument(
-            #         "--arch", choices=ARCH_MODEL_INV_REGISTRY[model_name]
-            #     )
-            #     group_args = parser.add_argument_group(
-            #         "Additional command-line arguments"
-            #     )
-            #     MODEL_REGISTRY[model_name].add_args(group_args)
-            #     globals()[model_name + "_parser"] = parser
+            module = file[: file.find(".py")] if file.endswith(".py") else file
+            importlib.import_module(namespace + "." + module)
 
 
-# automatically import any Python files in the models/ directory
+# automatically import any Python files in this directory as 'vaxseer.models.<mod>'
 models_dir = os.path.dirname(__file__)
-import_models(models_dir, "models")
+import_models(models_dir, __name__)

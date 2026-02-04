@@ -1,14 +1,17 @@
 import torch
 import transformers
 import torch.nn as nn
-from models import register_model
+#from models import register_model
+from vaxseer.models import register_model
 import math, logging
 from typing import IO, Any, Callable, Dict, Optional, Union
-from utils.args import str2bool
+#from utils.args import str2bool
+from vaxseer.utils.args import str2bool
 from transformers import AutoConfig
 from copy import deepcopy
 import torch.nn.functional as F
-from models.gpt2_transmission import GPTOutputs, GPT2TimeTransmission, GPT2TimeTransmissionModule, GPT2TimeTransmissionSimpleModule, GPT2TimeTransmissionParamShareModule
+#from models.gpt2_transmission import GPTOutputs, GPT2TimeTransmission, GPT2TimeTransmissionModule, GPT2TimeTransmissionSimpleModule, GPT2TimeTransmissionParamShareModule
+from vaxseer.models.gpt2_transmission import GPTOutputs, GPT2TimeTransmission, GPT2TimeTransmissionModule, GPT2TimeTransmissionSimpleModule, GPT2TimeTransmissionParamShareModule
 
 class GPT2TimeModelMultiHostsHierarchyBase(transformers.GPT2LMHeadModel):
     def __init__(self, config, num_components, **args) -> None:
