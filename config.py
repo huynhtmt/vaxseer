@@ -1,0 +1,1 @@
+from vaxseer.config import *
